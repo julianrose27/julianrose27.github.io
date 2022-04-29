@@ -39,6 +39,7 @@ playBtn.on('change', function(v) {
   if (playBtn.state) {
     fmOsc.start();
     dragger = setInterval(drag, dragInterval);
+    oscilloscope.connect(fmOsc);
   } else {
     fmOsc.stop();
     clearInterval(dragger);
@@ -62,7 +63,10 @@ freqSlider.on('change', function(v) {
   fmOsc.frequency.rampTo(carrierFreq, 0.4);
 })
 
-// slider to change the modulation index of the fmOscillator
+//------------------------------------------------------------------------------
+// Oscillator Modulation Index Control -----------------------------------------
+//------------------------------------------------------------------------------
+
 var modIndexSlider = new Nexus.Slider('#modIndexSlider',{
   'size': [120, 20],
   'mode': 'relative',
@@ -76,4 +80,11 @@ modIndexSlider.on('change', function(v) {
   console.log(v);
   modIndex = v;
   fmOsc.modulationIndex.rampTo(modIndex, 0.1);
+})
+
+//------------------------------------------------------------------------------
+// Oscilloscope ----------------------------------------------------------------
+//------------------------------------------------------------------------------
+var oscilloscope = new Nexus.Oscilloscope('#oscilloscope', {
+  'size': [300, 150]
 })
