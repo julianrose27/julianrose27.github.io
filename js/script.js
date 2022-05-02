@@ -1,7 +1,19 @@
 var dragInterval = 100;
-var carrierFreq = 440;
-var modIndex = 0;
 var dragger;
+
+var frequency = {
+  'min': 20,
+  'max': 1000,
+  'step': 0,
+  'value': 440
+}
+
+var modIndex = {
+  'min': 0,
+  'max': 10,
+  'step': 0,
+  'value': 0
+}
 
 var firstClick = 0;
 
@@ -21,7 +33,7 @@ feedbackDelay = new Tone.FeedbackDelay({
 
 // create the oscillator
 const fmOsc = new Tone.FMOscillator({
-  frequency: carrierFreq,
+  frequency: frequency['value'],
   type: "sine",
   modulationType: "triangle",
   harmonicity: 0.2,
@@ -49,14 +61,14 @@ masterVolumeDial.on('change', function(v) {
 //------------------------------------------------------------------------------
 function drag() {
   // oscillator main frequency
-  carrierFreq = carrierFreq*0.995;
-  fmOsc.frequency.rampTo(carrierFreq, 0.4);
-  freqSlider.value = carrierFreq;
+  frequency['value'] = frequency['value']*0.995;
+  fmOsc.frequency.rampTo(frequency['value'], 0.4);
+  freqSlider.value = frequency['value'];
 
   // oscillator modulation index
-  modIndex = modIndex*0.99;
-  fmOsc.modulationIndex.rampTo(modIndex, 0.4);
-  modIndexSlider.value = modIndex;
+  modIndex['value'] = modIndex['value']*0.99;
+  fmOsc.modulationIndex.rampTo(modIndex['value'], 0.4);
+  modIndexSlider.value = modIndex['value'];
 
 }
 
@@ -71,7 +83,6 @@ playBtn.on('change', function(v) {
   if (playBtn.state) {
     fmOsc.start();
     dragger = setInterval(drag, dragInterval);
-    oscilloscope.connect(fmOsc);
   } else {
     fmOsc.stop();
     clearInterval(dragger);
@@ -82,24 +93,34 @@ playBtn.on('change', function(v) {
 // Oscillator Carrier Frequency Slider -----------------------------------------
 //------------------------------------------------------------------------------
 var freqSlider = new Nexus.Slider('#freqSlider',{
-    'size': [120,20],
+    // 'size': [100, 350],
     'mode': 'relative',
-    'min': 20,
-    'max': 1000,
-    'step': 0,
-    'value': 440
+    'min': frequency['min'],
+    'max': frequency['max'],
+    'step': frequency['step'],
+    'value': frequency['value']
 })
 // adjust the frequency of the carrier oscillator when the slider value is changed
 freqSlider.on('change', function(v) {
-  carrierFreq = v;
-  fmOsc.frequency.rampTo(carrierFreq, 0.4);
+  frequency['value'] = v;
+  fmOsc.frequency.rampTo(frequency['value'], 0.4);
+  freqNum.value = frequency['value'], 0.4;
+})
+
+var freqNum = new Nexus.Number("#freqNum", {
+  'size': [100, 40],
+  'value': frequency['value'],
+  'min': frequency['min'],
+  'max': frequency['max'],
+  'step': frequency['step'],
 })
 
 //------------------------------------------------------------------------------
 // Click Based Frequency Control -----------------------------------------------
 //------------------------------------------------------------------------------
 var freqBtn = new Nexus.Button('#freqBtn',{
-  'mode': 'button'
+  'mode': 'button',
+  'size': [100, 100]
 })
 
 freqBtn.on('change', function(v) {
@@ -111,9 +132,9 @@ freqBtn.on('change', function(v) {
     var secondClick = (new Date()).getTime();
     var time = secondClick-firstClick;
     // multiply the carrier frequency by 1 + a fraction of the time that the button was held down
-    carrierFreq = carrierFreq*(1+(time/4500));
-    fmOsc.frequency.rampTo(carrierFreq, 0.4);
-    freqSlider.value = carrierFreq;
+    frequency['value'] = frequency['value']*(1+(time/4500));
+    fmOsc.frequency.rampTo(frequency['value'], 0.4);
+    freqSlider.value = frequency['value'];
   }
 })
 
@@ -121,7 +142,7 @@ freqBtn.on('change', function(v) {
 // Oscillator Modulation Index Control -----------------------------------------
 //------------------------------------------------------------------------------
 var modIndexSlider = new Nexus.Slider('#modIndexSlider',{
-  'size': [120, 20],
+  // 'size': [100, 350],
   'mode': 'relative',
   'min': 0,
   'max': 10,
@@ -131,15 +152,25 @@ var modIndexSlider = new Nexus.Slider('#modIndexSlider',{
 
 modIndexSlider.on('change', function(v) {
   // console.log(v);
-  modIndex = v;
-  fmOsc.modulationIndex.rampTo(modIndex, 0.1);
+  modIndex['value'] = v;
+  fmOsc.modulationIndex.rampTo(modIndex['value'], 0.1);
+  modIndexNum.value = v;
+})
+
+var modIndexNum = new Nexus.Number("#modIndexNum", {
+  'size': [100, 40],
+  'min': 0,
+  'max': 10,
+  'step': 0,
+  'value': 0
 })
 
 //------------------------------------------------------------------------------
 // Click Based Modulation Index Control ----------------------------------------
 //------------------------------------------------------------------------------
 var modIndexButton = new Nexus.Button('#modIndexButton',{
-  'mode': 'button'
+  'mode': 'button',
+  'size': [100, 100]
 })
 
 modIndexButton.on('change', function(v) {
@@ -151,9 +182,10 @@ modIndexButton.on('change', function(v) {
     var secondClick = (new Date()).getTime();
     var time = secondClick-firstClick;
     // multiply the mod index by 1 + a fraction of the time that the button was held down
-    modIndex = modIndex*(1+(time/3000));
-    fmOsc.modulationIndex.rampTo(modIndex, 0.4);
-    modIndexSlider.value = modIndex;
+    modIndex['value'] = modIndex['value']*(1+(time/3000));
+    fmOsc.modulationIndex.rampTo(modIndex['value'], 0.4);
+    modIndexNum.value = modIndex['value'];
+    modIndexSlider.value = modIndex['value'];
   }
 })
 
@@ -161,5 +193,10 @@ modIndexButton.on('change', function(v) {
 // Oscilloscope ----------------------------------------------------------------
 //------------------------------------------------------------------------------
 var oscilloscope = new Nexus.Oscilloscope('#oscilloscope', {
-  'size': [300, 150]
-})
+  size: [300, 150]
+});
+var spectrogram = new Nexus.Spectrogram('#spectrogram', {
+  size: [300, 150]
+});
+oscilloscope.connect(Tone.Master);
+spectrogram.connect(Tone.Master);

@@ -14,19 +14,33 @@
     <!-- NexusUI -->
     <script src="https://cdn.jsdelivr.net/npm/nexusui@latest/dist/NexusUI.js"></script>
 
-    <link rel="stylesheet" href="style.css">
+    <!-- Bootstrap Grid -->
+    <link rel="stylesheet" href="css/bootstrap-grid.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
 
     <title>Website</title>
   </head>
 
-  <body style="margin-top:10px" id="root">
+  <body style="margin-top:10px" id="root" class="container">
       <div id="oscilloscope"></div>
+      <div id="spectrogram"></div>
       <div id="masterVolumeDial"></div>
       <div id="playBtn"></div>
-      <div id="freqSlider"></div>
-      <div id="freqBtn"></div>
-      <div id="modIndexSlider"></div>
-      <div id="modIndexButton"></div>
+      <div class="row">
+        <div class="component col">
+          <p class="label">Frequency</p>
+          <div id="freqNum" class="locked"></div>
+          <div id="freqSlider"></div>
+          <div id="freqBtn"></div>
+        </div>
+        <div class="component col">
+          <p class = "label">Modulation Index</p>
+          <div id="modIndexNum" class="locked"></div>
+          <div id="modIndexSlider"></div>
+          <div id="modIndexButton"></div>
+        </div>
+      </div>
   </body>
 
   <script type="text/javascript" src="js/script.js"></script>

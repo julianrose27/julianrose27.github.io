@@ -1,4 +1,0 @@
-/* Disable mouse interactions with certain HTML elements */
-.locked {
-  pointer-events: none;
-}
