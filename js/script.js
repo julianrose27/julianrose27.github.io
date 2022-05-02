@@ -3,6 +3,8 @@ var carrierFreq = 440;
 var modIndex = 0;
 var dragger;
 
+var firstClick = 0;
+
 const fmOsc = new Tone.FMOscillator({
   frequency: carrierFreq,
   type: "sine",
@@ -64,9 +66,30 @@ freqSlider.on('change', function(v) {
 })
 
 //------------------------------------------------------------------------------
+// Click Based Frequency Control -----------------------------------------------
+//------------------------------------------------------------------------------
+var freqBtn = new Nexus.Button('#freqBtn',{
+  'mode': 'button'
+})
+
+freqBtn.on('change', function(v) {
+  if (v) {
+    // set the time for when the button is clicked
+    firstClick = (new Date()).getTime();
+  } else {
+    // set the time for when the button is released and subtract it from the initial click time
+    var secondClick = (new Date()).getTime();
+    var time = secondClick-firstClick;
+    // multiply the carrier frequency by 1 + a fraction of the time that the button was held down
+    carrierFreq = carrierFreq*(1+(time/4500));
+    fmOsc.frequency.rampTo(carrierFreq, 0.4);
+    freqSlider.value = carrierFreq;
+  }
+})
+
+//------------------------------------------------------------------------------
 // Oscillator Modulation Index Control -----------------------------------------
 //------------------------------------------------------------------------------
-
 var modIndexSlider = new Nexus.Slider('#modIndexSlider',{
   'size': [120, 20],
   'mode': 'relative',
@@ -77,9 +100,31 @@ var modIndexSlider = new Nexus.Slider('#modIndexSlider',{
 })
 
 modIndexSlider.on('change', function(v) {
-  console.log(v);
+  // console.log(v);
   modIndex = v;
   fmOsc.modulationIndex.rampTo(modIndex, 0.1);
+})
+
+//------------------------------------------------------------------------------
+// Click Based Modulation Index Control ----------------------------------------
+//------------------------------------------------------------------------------
+var modIndexButton = new Nexus.Button('#modIndexButton',{
+  'mode': 'button'
+})
+
+modIndexButton.on('change', function(v) {
+  if (v) {
+    // set the time for when the button is clicked
+    firstClick = (new Date()).getTime();
+  } else {
+    // set the time for when the button is released and subtract it from the initial click time
+    var secondClick = (new Date()).getTime();
+    var time = secondClick-firstClick;
+    // multiply the mod index by 1 + a fraction of the time that the button was held down
+    modIndex = modIndex*(1+(time/3000));
+    fmOsc.modulationIndex.rampTo(modIndex, 0.4);
+    modIndexSlider.value = modIndex;
+  }
 })
 
 //------------------------------------------------------------------------------
