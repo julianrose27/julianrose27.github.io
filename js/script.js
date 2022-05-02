@@ -10,7 +10,7 @@ var frequency = {
 
 var modIndex = {
   'min': 0,
-  'max': 10,
+  'max': 20,
   'step': 0,
   'value': 0
 }
@@ -37,7 +37,7 @@ const fmOsc = new Tone.FMOscillator({
   type: "sine",
   modulationType: "triangle",
   harmonicity: 0.2,
-  modulationIndex: 0
+  modulationIndex: modIndex['value']
 }).connect(feedbackDelay);
 
 //------------------------------------------------------------------------------
@@ -144,10 +144,10 @@ freqBtn.on('change', function(v) {
 var modIndexSlider = new Nexus.Slider('#modIndexSlider',{
   // 'size': [100, 350],
   'mode': 'relative',
-  'min': 0,
-  'max': 10,
-  'step': 0,
-  'value': 0
+  'min': modIndex['min'],
+  'max': modIndex['max'],
+  'step': modIndex['step'],
+  'value': modIndex['value']
 })
 
 modIndexSlider.on('change', function(v) {
@@ -159,10 +159,10 @@ modIndexSlider.on('change', function(v) {
 
 var modIndexNum = new Nexus.Number("#modIndexNum", {
   'size': [100, 40],
-  'min': 0,
-  'max': 10,
-  'step': 0,
-  'value': 0
+  'min': modIndex['min'],
+  'max': modIndex['max'],
+  'step': modIndex['step'],
+  'value': modIndex['value']
 })
 
 //------------------------------------------------------------------------------
@@ -174,18 +174,26 @@ var modIndexButton = new Nexus.Button('#modIndexButton',{
 })
 
 modIndexButton.on('change', function(v) {
-  if (v) {
-    // set the time for when the button is clicked
-    firstClick = (new Date()).getTime();
-  } else {
-    // set the time for when the button is released and subtract it from the initial click time
-    var secondClick = (new Date()).getTime();
-    var time = secondClick-firstClick;
-    // multiply the mod index by 1 + a fraction of the time that the button was held down
-    modIndex['value'] = modIndex['value']*(1+(time/3000));
+  if (modIndex['value'] == 0) {
+    modIndex['value'] = 1;
     fmOsc.modulationIndex.rampTo(modIndex['value'], 0.4);
     modIndexNum.value = modIndex['value'];
     modIndexSlider.value = modIndex['value'];
+
+  } else {
+    if (v) {
+      // set the time for when the button is clicked
+      firstClick = (new Date()).getTime();
+    } else {
+      // set the time for when the button is released and subtract it from the initial click time
+      var secondClick = (new Date()).getTime();
+      var time = secondClick-firstClick;
+      // multiply the mod index by 1 + a fraction of the time that the button was held down
+      modIndex['value'] = modIndex['value']*(1+(time/3000));
+      fmOsc.modulationIndex.rampTo(modIndex['value'], 0.4);
+      modIndexNum.value = modIndex['value'];
+      modIndexSlider.value = modIndex['value'];
+    }
   }
 })
 
