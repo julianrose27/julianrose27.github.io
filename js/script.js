@@ -5,10 +5,19 @@ var dragger;
 
 var firstClick = 0;
 
-// create the gain object
+var delayTime = 0.5;
+
+// gain node
 var gain = new Tone.Gain({
   gain: 0.5
 }).toMaster();
+
+// delay node
+feedbackDelay = new Tone.FeedbackDelay({
+  delayTime: delayTime,
+  wet: 0.5,
+  feedback: 0.7
+}).connect(gain);
 
 // create the oscillator
 const fmOsc = new Tone.FMOscillator({
@@ -17,7 +26,7 @@ const fmOsc = new Tone.FMOscillator({
   modulationType: "triangle",
   harmonicity: 0.2,
   modulationIndex: 0
-}).connect(gain);
+}).connect(feedbackDelay);
 
 //------------------------------------------------------------------------------
 // Volume Dial -----------------------------------------------------------------
