@@ -5,19 +5,40 @@ var dragger;
 
 var firstClick = 0;
 
+// create the gain object
+var gain = new Tone.Gain({
+  gain: 0.5
+}).toMaster();
+
+// create the oscillator
 const fmOsc = new Tone.FMOscillator({
   frequency: carrierFreq,
   type: "sine",
   modulationType: "triangle",
   harmonicity: 0.2,
   modulationIndex: 0
-}).toDestination();
+}).connect(gain);
+
+//------------------------------------------------------------------------------
+// Volume Dial -----------------------------------------------------------------
+//------------------------------------------------------------------------------
+var masterVolumeDial = new Nexus.Dial('#masterVolumeDial', {
+  'interaction': 'radial',
+  'mode': 'relative',
+  'min': 0,
+  'max': 1,
+  'step': 0,
+  'value': 0.5
+});
+
+masterVolumeDial.on('change', function(v) {
+  gain.gain.rampTo(v, .1);
+})
 
 //------------------------------------------------------------------------------
 // Frequency Drag Logic --------------------------------------------------------
 //------------------------------------------------------------------------------
 function drag() {
-  console.log('hello');
   // oscillator main frequency
   carrierFreq = carrierFreq*0.995;
   fmOsc.frequency.rampTo(carrierFreq, 0.4);
