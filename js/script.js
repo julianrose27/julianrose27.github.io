@@ -21,7 +21,7 @@ var delayTime = {
   'value': 0.5,
   'wet': 0.5,
   'feedback': 0.7,
-  'min': 0.01,
+  'min': 0,
   'max': 1,
   'step': 0
 }
@@ -35,12 +35,21 @@ var gain = new Tone.Gain({
 
 const limiter = new Tone.Limiter(-20).connect(gain);
 
+// reverb node
+reverb = new Tone.Reverb({
+  channelCount: 2,
+  decay: 10,
+  wet: 0.15,
+  preDelay: 0.1
+}).connect(limiter);
+
 // delay node
 delay = new Tone.FeedbackDelay({
   delayTime: delayTime['value'],
   wet: delayTime['wet'],
   feedback: delayTime['feedback']
-}).connect(limiter);
+}).connect(reverb);
+
 
 // create the oscillator
 const fmOsc = new Tone.FMOscillator({
@@ -261,5 +270,7 @@ var oscilloscope = new Nexus.Oscilloscope('#oscilloscope', {
 var spectrogram = new Nexus.Spectrogram('#spectrogram', {
   size: [300, 150]
 });
+var meter = new Nexus.Meter('#meter');
 oscilloscope.connect(Tone.Master);
 spectrogram.connect(Tone.Master);
+meter.connect(Tone.Master);
