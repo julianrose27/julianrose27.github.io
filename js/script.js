@@ -26,7 +26,7 @@ var delayTime = {
   'step': 0
 }
 
-var firstClick, secondClick = 0;
+var firstClick = 0;
 
 // gain node
 var gain = new Tone.Gain({
