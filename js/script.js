@@ -1,6 +1,7 @@
 var dragInterval = 100;
 var dragger;
 
+// values for the frequency of the oscillator
 var frequency = {
   'min': 20,
   'max': 1000,
@@ -8,6 +9,7 @@ var frequency = {
   'value': 440
 }
 
+// values relating to the modulation index
 var modIndex = {
   'min': 0,
   'max': 20,
@@ -15,21 +17,30 @@ var modIndex = {
   'value': 0
 }
 
-var firstClick = 0;
+var delayTime = {
+  'value': 0.5,
+  'wet': 0.5,
+  'feedback': 0.7,
+  'min': 0.01,
+  'max': 1,
+  'step': 0
+}
 
-var delayTime = 0.5;
+var firstClick, secondClick = 0;
 
 // gain node
 var gain = new Tone.Gain({
   gain: 0.5
 }).toMaster();
 
+const limiter = new Tone.Limiter(-20).connect(gain);
+
 // delay node
-feedbackDelay = new Tone.FeedbackDelay({
-  delayTime: delayTime,
-  wet: 0.5,
-  feedback: 0.7
-}).connect(gain);
+delay = new Tone.FeedbackDelay({
+  delayTime: delayTime['value'],
+  wet: delayTime['wet'],
+  feedback: delayTime['feedback']
+}).connect(limiter);
 
 // create the oscillator
 const fmOsc = new Tone.FMOscillator({
@@ -38,7 +49,7 @@ const fmOsc = new Tone.FMOscillator({
   modulationType: "triangle",
   harmonicity: 0.2,
   modulationIndex: modIndex['value']
-}).connect(feedbackDelay);
+}).connect(delay);
 
 //------------------------------------------------------------------------------
 // Volume Dial -----------------------------------------------------------------
@@ -69,6 +80,11 @@ function drag() {
   modIndex['value'] = modIndex['value']*0.99;
   fmOsc.modulationIndex.rampTo(modIndex['value'], 0.4);
   modIndexSlider.value = modIndex['value'];
+
+  delayTime['value'] = delayTime['value']*0.99;
+
+  delay.delayTime.rampTo(delayTime['value'], 0.1);
+  delayTimeSlider.value = delayTime['value'];
 
 }
 
@@ -151,7 +167,6 @@ var modIndexSlider = new Nexus.Slider('#modIndexSlider',{
 })
 
 modIndexSlider.on('change', function(v) {
-  // console.log(v);
   modIndex['value'] = v;
   fmOsc.modulationIndex.rampTo(modIndex['value'], 0.1);
   modIndexNum.value = v;
@@ -189,13 +204,53 @@ modIndexButton.on('change', function(v) {
       var secondClick = (new Date()).getTime();
       var time = secondClick-firstClick;
       // multiply the mod index by 1 + a fraction of the time that the button was held down
-      modIndex['value'] = modIndex['value']*(1+(time/3000));
+      modIndex['value'] = modIndex['value']*(1+(time/2000));
       fmOsc.modulationIndex.rampTo(modIndex['value'], 0.4);
       modIndexNum.value = modIndex['value'];
       modIndexSlider.value = modIndex['value'];
     }
   }
 })
+
+//------------------------------------------------------------------------------
+// Delay Stuff -----------------------------------------------------------------
+//------------------------------------------------------------------------------
+var delayTimeSlider = new Nexus.Slider('#delayTimeSlider',{
+  // 'size': [100, 350],
+  'mode': 'relative',
+  'min': delayTime['min'],
+  'max': delayTime['max'],
+  'step': delayTime['step'],
+  'value': delayTime['value']
+})
+
+delayTimeSlider.on('change', function(v) {
+  delayTime['value'] = v;
+  delay.delayTime.rampTo(delayTime['value'], 0.1);
+  delayTimeNum.value = delayTime['value'];
+})
+
+var delayTimeButton = new Nexus.Button('#delayTimeButton', {
+  'mode': 'button',
+  'size': [100, 100]
+})
+
+delayTimeButton.on('change', function(v) {
+    delayTime['value'] = Math.random();
+    delay.delayTime.rampTo(delayTime['value'], 1);
+    delayTimeNum.value = delayTime['value'];
+    delayTimeSlider.value = delayTime['value'];
+})
+
+var delayTimeNum = new Nexus.Number('#delayTimeNum', {
+  'size': [100, 40],
+  'min': delayTime['min'],
+  'max': delayTime['max'],
+  'step': delayTime['step'],
+  'value': delayTime['value']
+})
+
+
 
 //------------------------------------------------------------------------------
 // Oscilloscope ----------------------------------------------------------------
