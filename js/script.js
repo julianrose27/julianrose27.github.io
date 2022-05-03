@@ -148,7 +148,7 @@ freqBtn.on('change', function(v) {
     var secondClick = (new Date()).getTime();
     var time = secondClick-firstClick;
     // multiply the carrier frequency by 1 + a fraction of the time that the button was held down
-    frequency['value'] = frequency['value']*(1+(time/4500));
+    frequency['value'] = frequency['value']*(1+(time/2500));
     fmOsc.frequency.rampTo(frequency['value'], 0.4);
     freqSlider.value = frequency['value'];
   }
@@ -204,7 +204,7 @@ modIndexButton.on('change', function(v) {
       var secondClick = (new Date()).getTime();
       var time = secondClick-firstClick;
       // multiply the mod index by 1 + a fraction of the time that the button was held down
-      modIndex['value'] = modIndex['value']*(1+(time/2000));
+      modIndex['value'] = modIndex['value']*(1+(time/1000));
       fmOsc.modulationIndex.rampTo(modIndex['value'], 0.4);
       modIndexNum.value = modIndex['value'];
       modIndexSlider.value = modIndex['value'];
