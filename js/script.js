@@ -26,6 +26,13 @@ var delayTime = {
   'step': 0
 }
 
+var autoPanner = {
+  value: 1,
+  min: 0.1,
+  max: 10,
+  step: 0
+}
+
 var firstClick = 0;
 
 // gain node
@@ -36,7 +43,7 @@ var gain = new Tone.Gain({
 const limiter = new Tone.Limiter(-20).connect(gain);
 
 // reverb node
-reverb = new Tone.Reverb({
+const reverb = new Tone.Reverb({
   channelCount: 2,
   decay: 10,
   wet: 0.15,
@@ -44,12 +51,20 @@ reverb = new Tone.Reverb({
 }).connect(limiter);
 
 // delay node
-delay = new Tone.FeedbackDelay({
+const delay = new Tone.FeedbackDelay({
   delayTime: delayTime['value'],
   wet: delayTime['wet'],
   feedback: delayTime['feedback']
 }).connect(reverb);
 
+// autopanner
+const panner = new Tone.Panner(1).connect(delay);
+const pannerLFO  = new Tone.LFO({
+  frequency: 5,
+  min: -100,
+  max: 100
+}).start();
+pannerLFO.connect(panner.pan);
 
 // create the oscillator
 const fmOsc = new Tone.FMOscillator({
@@ -58,7 +73,7 @@ const fmOsc = new Tone.FMOscillator({
   modulationType: "triangle",
   harmonicity: 0.2,
   modulationIndex: modIndex['value']
-}).connect(delay);
+}).connect(panner);
 
 //------------------------------------------------------------------------------
 // Volume Dial -----------------------------------------------------------------
@@ -90,10 +105,15 @@ function drag() {
   fmOsc.modulationIndex.rampTo(modIndex['value'], 0.4);
   modIndexSlider.value = modIndex['value'];
 
+  // delay time
   delayTime['value'] = delayTime['value']*0.99;
-
   delay.delayTime.rampTo(delayTime['value'], 0.1);
   delayTimeSlider.value = delayTime['value'];
+
+  // autopanner LFO
+  autoPanner['value'] = autoPanner['value']*0.99;
+  pannerLFO.frequency.rampTo(autoPanner['value'], 0.1);
+  pannerSlider.value = autoPanner['value'];
 
 }
 
@@ -257,6 +277,51 @@ var delayTimeNum = new Nexus.Number('#delayTimeNum', {
   'max': delayTime['max'],
   'step': delayTime['step'],
   'value': delayTime['value']
+})
+
+//------------------------------------------------------------------------------
+// Autopanner ------------------------------------------------------------------
+//------------------------------------------------------------------------------
+var pannerSlider = new Nexus.Slider('#pannerSlider', {
+  'mode': 'relative',
+  'min': autoPanner['min'],
+  'max': autoPanner['max'],
+  'step': autoPanner['step'],
+  'value': autoPanner['value']
+})
+
+pannerSlider.on('change', function(v) {
+  autoPanner['value'] = v;
+  pannerLFO.frequency.rampTo(autoPanner['value'], 0.1);
+  pannerNum.value = autoPanner['value'];
+})
+
+var pannerButton = new Nexus.Button('#pannerButton', {
+  'mode': 'button',
+  'size': [100, 100]
+})
+
+pannerButton.on('change', function(v) {
+  if (v) {
+    // set the time for when the button is clicked
+    firstClick = (new Date()).getTime();
+  } else {
+    // set the time for when the button is released and subtract it from the initial click time
+    var secondClick = (new Date()).getTime();
+    var time = secondClick-firstClick;
+    // multiply the carrier frequency by 1 + a fraction of the time that the button was held down
+    autoPanner['value'] = autoPanner['value']*(1+(time/1500));
+    pannerLFO.frequency.rampTo(autoPanner['value'], 0.1);
+    pannerSlider.value = autoPanner['value'];
+  }
+})
+
+var pannerNum = new Nexus.Number('#pannerNum', {
+  'size': [100, 40],
+  'min': autoPanner['min'],
+  'max': autoPanner['max'],
+  'step': autoPanner['step'],
+  'value': autoPanner['value']
 })
 
 
