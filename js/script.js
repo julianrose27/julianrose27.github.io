@@ -444,10 +444,10 @@ advancedToggle.on('change', function(v) {
 Nexus.colors.accent = "#1162db";
 
 var oscilloscope = new Nexus.Oscilloscope('#oscilloscope', {
-  size: [300, 150]
+  size: [500, 150]
 });
 var spectrogram = new Nexus.Spectrogram('#spectrogram', {
-  size: [300, 150]
+  size: [500, 150]
 });
 var meter = new Nexus.Meter('#meter', {
   size: [91, 115.7]

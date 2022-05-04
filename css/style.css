@@ -14,6 +14,8 @@
   border-width: 5px;
   border-radius: 5px;
   margin: 5px;
+  display: flex;
+  flex-direction: row;
 }
 
 .advanced {
@@ -55,4 +57,15 @@ https://github.com/michaelkolesidis/javascript-software-synthesizer
   text-align: center;
   padding: 0.5rem;
   margin: 5px;
+}
+
+#displays {
+  grid-column: 1 / 4;
+  grid-row: 1;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
