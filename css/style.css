@@ -16,6 +16,10 @@
   margin: 5px;
 }
 
+.advanced {
+  visibility: hidden;
+}
+
 /*
 These classes are borrowed from this repository:
 https://github.com/michaelkolesidis/javascript-software-synthesizer

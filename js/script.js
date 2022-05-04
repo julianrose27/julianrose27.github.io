@@ -420,6 +420,25 @@ panDepthDial.on('change', function(v) {
 panDepthDial.colorize('accent', '#23cece');
 
 //------------------------------------------------------------------------------
+// Advanced Options Toggle -----------------------------------------------------
+//------------------------------------------------------------------------------
+var advancedToggle = new Nexus.Toggle('#advancedToggle');
+
+advancedToggle.colorize('accent', '#353535');
+
+// have the advanced options hidden by default but the user can toggle them
+advancedToggle.on('change', function(v) {
+  var elements = document.getElementsByClassName('advanced');
+  for (let i = 0; i < elements.length; i++) {
+    if (v) {
+      elements[i].style.visibility = 'visible';
+    } else {
+      elements[i].style.visibility = 'hidden';
+    }
+  }
+})
+
+//------------------------------------------------------------------------------
 // Metering --------------------------------------------------------------------
 //------------------------------------------------------------------------------
 Nexus.colors.accent = "#1162db";
