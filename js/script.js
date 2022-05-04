@@ -78,6 +78,8 @@ const fmOsc = new Tone.FMOscillator({
 //------------------------------------------------------------------------------
 // Volume Dial -----------------------------------------------------------------
 //------------------------------------------------------------------------------
+Nexus.colors.accent = "#353535";
+
 var masterVolumeDial = new Nexus.Dial('#masterVolumeDial', {
   'interaction': 'radial',
   'mode': 'relative',
@@ -137,6 +139,9 @@ playBtn.on('change', function(v) {
 //------------------------------------------------------------------------------
 // Oscillator Carrier Frequency Slider -----------------------------------------
 //------------------------------------------------------------------------------
+Nexus.colors.accent = "#50b755";
+Nexus.colors.mediumLight = "#78bc7c";
+
 var freqSlider = new Nexus.Slider('#freqSlider',{
     // 'size': [100, 350],
     'mode': 'relative',
@@ -160,9 +165,6 @@ var freqNum = new Nexus.Number("#freqNum", {
   'step': frequency['step'],
 })
 
-//------------------------------------------------------------------------------
-// Click Based Frequency Control -----------------------------------------------
-//------------------------------------------------------------------------------
 var freqBtn = new Nexus.Button('#freqBtn',{
   'mode': 'button',
   'size': [100, 100]
@@ -186,6 +188,9 @@ freqBtn.on('change', function(v) {
 //------------------------------------------------------------------------------
 // Oscillator Modulation Index Control -----------------------------------------
 //------------------------------------------------------------------------------
+Nexus.colors.accent = "#d35454";
+Nexus.colors.mediumLight = "#d38585";
+
 var modIndexSlider = new Nexus.Slider('#modIndexSlider',{
   // 'size': [100, 350],
   'mode': 'relative',
@@ -209,9 +214,6 @@ var modIndexNum = new Nexus.Number("#modIndexNum", {
   'value': modIndex['value']
 })
 
-//------------------------------------------------------------------------------
-// Click Based Modulation Index Control ----------------------------------------
-//------------------------------------------------------------------------------
 var modIndexButton = new Nexus.Button('#modIndexButton',{
   'mode': 'button',
   'size': [100, 100]
@@ -244,6 +246,9 @@ modIndexButton.on('change', function(v) {
 //------------------------------------------------------------------------------
 // Delay Stuff -----------------------------------------------------------------
 //------------------------------------------------------------------------------
+Nexus.colors.accent = "#be34ed";
+Nexus.colors.mediumLight = "#cd75ea";
+
 var delayTimeSlider = new Nexus.Slider('#delayTimeSlider',{
   // 'size': [100, 350],
   'mode': 'relative',
@@ -282,6 +287,9 @@ var delayTimeNum = new Nexus.Number('#delayTimeNum', {
 //------------------------------------------------------------------------------
 // Autopanner ------------------------------------------------------------------
 //------------------------------------------------------------------------------
+Nexus.colors.accent = "#23cece";
+Nexus.colors.mediumLight = "#8acece"
+
 var pannerSlider = new Nexus.Slider('#pannerSlider', {
   'mode': 'relative',
   'min': autoPanner['min'],
@@ -324,18 +332,20 @@ var pannerNum = new Nexus.Number('#pannerNum', {
   'value': autoPanner['value']
 })
 
-
-
 //------------------------------------------------------------------------------
-// Oscilloscope ----------------------------------------------------------------
+// Metering --------------------------------------------------------------------
 //------------------------------------------------------------------------------
+Nexus.colors.accent = "#1162db";
+
 var oscilloscope = new Nexus.Oscilloscope('#oscilloscope', {
   size: [300, 150]
 });
 var spectrogram = new Nexus.Spectrogram('#spectrogram', {
   size: [300, 150]
 });
-var meter = new Nexus.Meter('#meter');
+var meter = new Nexus.Meter('#meter', {
+  size: [75, 150]
+});
 oscilloscope.connect(Tone.Master);
 spectrogram.connect(Tone.Master);
 meter.connect(Tone.Master);
