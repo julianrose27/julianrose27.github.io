@@ -333,6 +333,25 @@ var pannerNum = new Nexus.Number('#pannerNum', {
 })
 
 //------------------------------------------------------------------------------
+// Drag Rage Adjustment --------------------------------------------------------
+//------------------------------------------------------------------------------
+var dragRateDial = new Nexus.Dial('#dragRateDial', {
+  'min': 10,
+  'max': 1000,
+  'value': dragInterval,
+  'step': 1
+})
+
+dragRateDial.on('change', function(v) {
+  dragInterval = v;
+  clearInterval(dragger);
+  dragger = setInterval(drag, dragInterval);
+})
+
+dragRateDial.colorize('accent', "#353535");
+
+
+//------------------------------------------------------------------------------
 // Oscillator Wave Selection ---------------------------------------------------
 //------------------------------------------------------------------------------
 var oscWaveSelect = new Nexus.Select('#oscWaveSelect', {
