@@ -8,6 +8,14 @@
   margin: 5px, 5px, 5px, 5px;
 }
 
+.component-row {
+  border: solid;
+  border-color: #f2f2f2;
+  border-width: 5px;
+  border-radius: 5px;
+  margin: 5px;
+}
+
 /*
 These classes are borrowed from this repository:
 https://github.com/michaelkolesidis/javascript-software-synthesizer
@@ -42,4 +50,5 @@ https://github.com/michaelkolesidis/javascript-software-synthesizer
   width: fit-content;
   text-align: center;
   padding: 0.5rem;
+  margin: 5px;
 }

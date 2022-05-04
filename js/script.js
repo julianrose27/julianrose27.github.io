@@ -137,7 +137,7 @@ playBtn.on('change', function(v) {
 })
 
 //------------------------------------------------------------------------------
-// Oscillator Carrier Frequency Slider -----------------------------------------
+// Oscillator Carrier Frequency ------------------------------------------------
 //------------------------------------------------------------------------------
 Nexus.colors.accent = "#50b755";
 Nexus.colors.mediumLight = "#78bc7c";
@@ -333,6 +333,17 @@ var pannerNum = new Nexus.Number('#pannerNum', {
 })
 
 //------------------------------------------------------------------------------
+// Oscillator Wave Selection ---------------------------------------------------
+//------------------------------------------------------------------------------
+var oscWaveSelect = new Nexus.Select('#oscWaveSelect', {
+  'options': ['sine', 'square', 'triangle', 'sawtooth']
+})
+
+oscWaveSelect.on('change', function(v) {
+  fmOsc.type = v.value;
+})
+
+//------------------------------------------------------------------------------
 // Metering --------------------------------------------------------------------
 //------------------------------------------------------------------------------
 Nexus.colors.accent = "#1162db";
@@ -344,8 +355,9 @@ var spectrogram = new Nexus.Spectrogram('#spectrogram', {
   size: [300, 150]
 });
 var meter = new Nexus.Meter('#meter', {
-  size: [75, 150]
+  size: [91, 115.7]
 });
 oscilloscope.connect(Tone.Master);
 spectrogram.connect(Tone.Master);
 meter.connect(Tone.Master);
+meter.colorize('accent', '#5fdb06');
