@@ -344,6 +344,82 @@ oscWaveSelect.on('change', function(v) {
 })
 
 //------------------------------------------------------------------------------
+// Delay Mix -------------------------------------------------------------------
+//------------------------------------------------------------------------------
+var delayMixDial = new Nexus.Dial('#delayMixDial', {
+  'min': 0,
+  'max': 1,
+  'value': delayTime['wet']
+})
+
+var delayMixNum = new Nexus.Number('#delayMixNum', {
+  'min': 0,
+  'max': 1,
+  'value': delayTime['wet'],
+  'step': 0
+})
+
+// update values when the dial is changed
+delayMixDial.on('change', function(v) {
+  delayTime['wet'] = v;
+  delayMixNum.value = v;
+  delay.wet.rampTo(delayTime['wet'], 0.4);
+})
+// color
+delayMixDial.colorize('accent', "#be34ed");
+
+//------------------------------------------------------------------------------
+// Delay Feedback --------------------------------------------------------------
+//------------------------------------------------------------------------------
+var delayFeedbackDial = new Nexus.Dial('#delayFeedbackDial', {
+  'min': 0,
+  'max': 1,
+  'step': 0,
+  'value': delayTime['feedback']
+})
+
+var delayFeedbackNum = new Nexus.Number('#delayFeedbackNum', {
+  'min': 0,
+  'max': 1,
+  'step': 0,
+  'value': delayTime['feedback']
+})
+
+// update the values when the dial is changed
+delayFeedbackDial.on('change', function(v) {
+  delayTime['feedback'] = v;
+  delayFeedbackNum.value = v;
+  delay.feedback.rampTo(delayTime['feedback'], 0.4);
+})
+// color
+delayFeedbackDial.colorize('accent', "#be34ed");
+
+//------------------------------------------------------------------------------
+// Pan Depth -------------------------------------------------------------------
+//------------------------------------------------------------------------------
+var panDepthDial = new Nexus.Dial('#panDepthDial', {
+  'min': 0,
+  'max': 100,
+  'step': 1,
+  'value': pannerLFO.max
+})
+
+var panDepthNum = new Nexus.Number('#panDepthNum', {
+  'min': 0,
+  'max': 100,
+  'step': 1,
+  'value': pannerLFO.max
+})
+// update values
+panDepthDial.on('change', function(v) {
+  pannerLFO.max = v;
+  pannerLFO.min = v*-1;
+  panDepthNum.value = v;
+})
+// color
+panDepthDial.colorize('accent', '#23cece');
+
+//------------------------------------------------------------------------------
 // Metering --------------------------------------------------------------------
 //------------------------------------------------------------------------------
 Nexus.colors.accent = "#1162db";
