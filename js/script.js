@@ -27,10 +27,10 @@ var delayTime = {
 }
 
 var autoPanner = {
-  value: 1,
-  min: 0.1,
-  max: 10,
-  step: 0
+  'value': 1,
+  'min': 0.1,
+  'max': 10,
+  'step': 0
 }
 
 var firstClick = 0;
@@ -318,7 +318,7 @@ pannerButton.on('change', function(v) {
     var secondClick = (new Date()).getTime();
     var time = secondClick-firstClick;
     // multiply the carrier frequency by 1 + a fraction of the time that the button was held down
-    autoPanner['value'] = autoPanner['value']*(1+(time/1500));
+    autoPanner['value'] = autoPanner['value']*(1+(time/500));
     pannerLFO.frequency.rampTo(autoPanner['value'], 0.1);
     pannerSlider.value = autoPanner['value'];
   }
@@ -337,7 +337,7 @@ var pannerNum = new Nexus.Number('#pannerNum', {
 //------------------------------------------------------------------------------
 var dragRateDial = new Nexus.Dial('#dragRateDial', {
   'min': 10,
-  'max': 1000,
+  'max': 400,
   'value': dragInterval,
   'step': 1
 })
@@ -350,6 +350,22 @@ dragRateDial.on('change', function(v) {
 
 dragRateDial.colorize('accent', "#353535");
 
+//------------------------------------------------------------------------------
+// Harmonicity Adjustment ------------------------------------------------------
+//------------------------------------------------------------------------------
+var harmonicityDial = new Nexus.Dial('#harmonicityDial', {
+  'min': 0.1,
+  'max': 15,
+  'value': 0.2,
+  'step': 0.1
+})
+
+harmonicityDial.on('change', function(v) {
+  fmOsc.harmonicity.rampTo(v);
+  console.log(v);
+})
+
+harmonicityDial.colorize('accent', '#d35454');
 
 //------------------------------------------------------------------------------
 // Oscillator Wave Selection ---------------------------------------------------
