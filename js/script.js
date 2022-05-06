@@ -99,22 +99,22 @@ masterVolumeDial.on('change', function(v) {
 function drag() {
   // oscillator main frequency
   frequency['value'] = frequency['value']*0.995;
-  fmOsc.frequency.rampTo(frequency['value'], 0.4);
+  fmOsc.frequency.rampTo(frequency['value'], dragInterval/1000);
   freqSlider.value = frequency['value'];
 
   // oscillator modulation index
   modIndex['value'] = modIndex['value']*0.99;
-  fmOsc.modulationIndex.rampTo(modIndex['value'], 0.4);
+  fmOsc.modulationIndex.rampTo(modIndex['value'], dragInterval/1000);
   modIndexSlider.value = modIndex['value'];
 
   // delay time
   delayTime['value'] = delayTime['value']*0.99;
-  delay.delayTime.rampTo(delayTime['value'], 0.1);
+  delay.delayTime.rampTo(delayTime['value'], dragInterval/1000);
   delayTimeSlider.value = delayTime['value'];
 
   // autopanner LFO
   autoPanner['value'] = autoPanner['value']*0.99;
-  pannerLFO.frequency.rampTo(autoPanner['value'], 0.1);
+  pannerLFO.frequency.rampTo(autoPanner['value'], dragInterval/1000);
   pannerSlider.value = autoPanner['value'];
 
 }
