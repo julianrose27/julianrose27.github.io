@@ -71,7 +71,7 @@ const fmOsc = new Tone.FMOscillator({
   frequency: frequency['value'],
   type: "sine",
   modulationType: "triangle",
-  harmonicity: 0.2,
+  harmonicity: 0,
   modulationIndex: modIndex['value']
 }).connect(panner);
 
@@ -356,7 +356,7 @@ dragRateDial.colorize('accent', "#353535");
 var harmonicityDial = new Nexus.Dial('#harmonicityDial', {
   'min': 0.1,
   'max': 15,
-  'value': 0.2,
+  'value': 0,
   'step': 0.1
 })
 
