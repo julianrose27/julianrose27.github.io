@@ -337,7 +337,7 @@ var pannerNum = new Nexus.Number('#pannerNum', {
 //------------------------------------------------------------------------------
 var dragRateDial = new Nexus.Dial('#dragRateDial', {
   'min': 10,
-  'max': 400,
+  'max': 200,
   'value': dragInterval,
   'step': 1
 })
